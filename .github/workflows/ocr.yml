@@ -1,0 +1,37 @@
+name: OCR Ācāranga-sūtra
+on:
+  push:
+    paths:
+      - 'scans/acaranga.pdf'
+      - 'ocr_test.py'
+  workflow_dispatch:
+
+jobs:
+  ocr:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Install system deps
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y tesseract-ocr tesseract-ocr-hin poppler-utils
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install Python packages
+      run: pip install --upgrade pip && pip install pytesseract pillow pdf2image
+
+    - name: Run OCR script
+      run: python ocr_test.py
+
+    - name: Commit raw OCR output
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "📄 Add OCR raw output"
+        file_pattern: "ocr_raw/*.txt"
