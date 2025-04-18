@@ -5,7 +5,7 @@ on:
   push:
     paths:
       - 'ocr_raw/**.txt'
-      - 'preprocess/segment_text.py'
+      - 'reprocess/segment_text.py'
 
 jobs:
   segment:
@@ -24,7 +24,7 @@ jobs:
         run: pip install --upgrade pip
 
       - name: Run segmentation script
-        run: python preprocess/segment_text.py
+        run: python reprocess/segment_text.py
 
       - name: Commit processed segments
         uses: stefanzweifel/git-auto-commit-action@v4
